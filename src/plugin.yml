@@ -1,0 +1,30 @@
+
+name: InvMaster
+version: 0.5
+main: com.deaboy.invmaster.InvMaster
+author: Deaboy
+commands:
+    inventory:
+        usage: Use /inventory <player> to view their inventory.
+        description: Opens another player's inventory.
+        aliases: [inv]
+    enderchest:
+        usage: Use /enderchest <player> to view their enderchest.
+        description: opens another player's enderchest.
+        aliases: [ec, chest, echest, enderc]
+    armor:
+        usage: Use /armor <player> to view their armor contents.
+        description: Opens another player's armor contents.
+        aliases: [arm, ar]
+    addenchantment:
+        usage: Use /addenchantment <enchantment> <level> to add an enchantment to the item in hand.
+        description: Adds an enchantment to the item in hand.
+        aliases: [addench, adden, adde, aench, ae]
+    removeenchantment:
+        usage: Use /removeenchantment <enchantment> to remove an enchantment from the item in hand.
+        description: Removes an enchantment from the item in hand.
+        aliases: [deleteenchantment, remenchantment, delenchantment, remench, delench, remen, delen, reme, dele, rench, dench, re, de]
+    clearenchantments:
+        usage: Use /clearenchantments to clear all enchantments from the item in hand.
+        description: Clears all enchantments from the item in hand.
+        aliases: [clrenchantments, clrench, clren, clre, ce]
