@@ -1,6 +1,6 @@
 
 name: InvMaster
-version: 0.5
+version: 1.1
 main: com.deaboy.invmaster.InvMaster
 author: Deaboy
 commands:
