@@ -16,6 +16,10 @@ commands:
         usage: Use /armor <player> to view their armor contents.
         description: Opens another player's armor contents.
         aliases: [arm, ar]
+    listplayers:
+        usage: Use /viewplayers [page] to view a list of player data files.
+        description: Lists the server's saved player data files.
+        aliases: [lsp, lsplrs, listp]
     addenchantment:
         usage: Use /addenchantment <enchantment> <level> to add an enchantment to the item in hand.
         description: Adds an enchantment to the item in hand.
