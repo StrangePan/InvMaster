@@ -156,7 +156,7 @@ public class InvMasterCommands implements CommandExecutor
 			{
 				try
 				{
-					page = Integer.parseInt(args[1]);
+					page = Integer.parseInt(args[0]);
 					if (page < 1)
 						page = 1;
 				}
