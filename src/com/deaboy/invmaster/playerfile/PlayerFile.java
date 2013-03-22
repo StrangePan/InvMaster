@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_5_R1.NBTTagCompound;
+import net.minecraft.server.v1_5_R2.NBTTagCompound;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_5_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.FileUtil;
 import org.jnbt.ByteTag;
@@ -227,7 +227,7 @@ public class PlayerFile
 			int slot = ((ByteTag) ((CompoundTag) t).getValue().get("Slot")).getValue();
 			if (slot < 36)
 			{
-				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_5_R1.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
+				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_5_R2.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
 			}
 		}
 		
@@ -248,7 +248,7 @@ public class PlayerFile
 			int slot = ((ByteTag) ((CompoundTag) t).getValue().get("Slot")).getValue();
 			if (slot >= 100 && slot <= 103)
 			{
-				inv[slot-100] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_5_R1.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
+				inv[slot-100] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_5_R2.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
 			}
 		}
 		
@@ -269,7 +269,7 @@ public class PlayerFile
 			int slot = ((ByteTag) ((CompoundTag) t).getValue().get("Slot")).getValue();
 			if (slot < 36)
 			{
-				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_5_R1.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
+				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_5_R2.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
 			}
 		}
 		
