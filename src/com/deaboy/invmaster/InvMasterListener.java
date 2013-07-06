@@ -112,7 +112,6 @@ public class InvMasterListener implements Listener
 			{
 				e.setResult(Result.DENY);
 				e.setCancelled(true);
-				e.setCursor(e.getCursor());
 				return;
 			}
 			else
