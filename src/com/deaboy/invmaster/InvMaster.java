@@ -254,8 +254,8 @@ public class InvMaster extends JavaPlugin
 		inv.setContents(pfile.getEnderchestContents());
 		enderchests.put(pfile, inv);
 		
-		inv = (armor.containsKey(pfile) ? armor.get(pfile) : Bukkit.createInventory(null, 27, p.getName() + "'s Ender Chest"));
-		inv.setContents(pfile.getEnderchestContents());
+		inv = (armor.containsKey(pfile) ? armor.get(pfile) : Bukkit.createInventory(null, 27, p.getName() + "'s Armor"));
+		inv.setContents(pfile.getArmorContents());
 		armor.put(pfile, inv);
 		
 		
