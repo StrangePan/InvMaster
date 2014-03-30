@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagDouble;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagDouble;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class DoubleTag extends Tag {
 
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public DoubleTag(String name, double value) {
-		super(name, TagType.DOUBLE);
+	public DoubleTag(double value) {
 		this.value = value;
 	}
 	
@@ -64,22 +64,29 @@ public final class DoubleTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Double" + append + ": " + value;
+		return "TAG_Double: " + value;
 	}
 
 	@Override
 	public NBTTagDouble toNBTTag()
 	{
-		return new NBTTagDouble(this.getName(), this.getValue());
+		return new NBTTagDouble(this.getValue());
 	}
 	
 	public static DoubleTag fromNBTTag(NBTTagDouble base)
 	{
-		return new DoubleTag(base.getName(), base.data);
+		return new DoubleTag(base.g());
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.DOUBLE;
+	}
+
+	
+	@Override
+	public Type getDataType() {
+		return double.class;
 	}
 }

@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagFloat;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagFloat;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class FloatTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public FloatTag(String name, float value) {
-		super(name, TagType.FLOAT);
+	public FloatTag(float value) {
 		this.value = value;
 	}
 	
@@ -64,22 +64,30 @@ public final class FloatTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Float" + append + ": " + value;
+		return "TAG_Float: " + value;
 	}
 
 	@Override
 	public NBTTagFloat toNBTTag()
 	{
-		return new NBTTagFloat(this.getName(), this.getValue());
+		return new NBTTagFloat(this.getValue());
 	}
 	
 	public static FloatTag fromNBTTag(NBTTagFloat base)
 	{
-		return new FloatTag(base.getName(), base.data);
+		return new FloatTag(base.h());
 	}
+	
+
+	@Override
+	public TagType getTagType() {
+		return TagType.FLOAT;
+	}
+	
+
+	@Override
+	public Type getDataType() {
+		return float.class;
+	}
+	
 }

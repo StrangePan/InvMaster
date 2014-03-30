@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagInt;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagInt;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class IntTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public IntTag(String name, int value) {
-		super(name, TagType.INTEGER);
+	public IntTag(int value) {
 		this.value = value;
 	}
 
@@ -64,22 +64,29 @@ public final class IntTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Int" + append + ": " + value;
+		return "TAG_Int: " + value;
 	}
 
 	@Override
 	public NBTTagInt toNBTTag()
 	{
-		return new NBTTagInt(this.getName(), this.getValue());
+		return new NBTTagInt(this.getValue());
 	}
 	
 	public static IntTag fromNBTTag(NBTTagInt base)
 	{
-		return new IntTag(base.getName(), base.data);
+		return new IntTag(base.d());
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.INTEGER;
+	}
+
+	
+	@Override
+	public Type getDataType() {
+		return int.class;
 	}
 }

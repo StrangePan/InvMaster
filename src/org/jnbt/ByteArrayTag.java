@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagByteArray;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagByteArray;
 
 /*
  * JNBT License
@@ -52,8 +54,7 @@ public final class ByteArrayTag extends Tag {
 	 * @param name The name.
 	 * @param value The value.
 	 */
-	public ByteArrayTag(String name, byte[] value) {
-		super(name, TagType.BYTE_ARRAY);
+	public ByteArrayTag(byte[] value) {
 		this.value = value;
 	}
 	
@@ -72,22 +73,27 @@ public final class ByteArrayTag extends Tag {
 			}
 			hex.append(hexDigits).append(" ");
 		}
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Byte_Array" + append + ": " + hex.toString();
+		return "TAG_Byte_Array: " + hex.toString();
 	}
 
 	@Override
 	public NBTTagByteArray toNBTTag()
 	{
-		return new NBTTagByteArray(this.getName(), this.getValue());
+		return new NBTTagByteArray(this.getValue());
 	}
 	
 	public static ByteArrayTag fromNBTTag(NBTTagByteArray base)
 	{
-		return new ByteArrayTag(base.getName(), base.data);
+		return new ByteArrayTag(base.c());
+	}
+
+	@Override
+	public TagType getTagType() {
+		return TagType.BYTE_ARRAY;
+	}
+
+	@Override
+	public Type getDataType() {
+		return byte[].class;
 	}
 }

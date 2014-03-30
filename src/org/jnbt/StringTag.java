@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagString;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagString;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class StringTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public StringTag(String name, String value) {
-		super(name, TagType.STRING);
+	public StringTag(String value) {
 		this.value = value;
 	}
 	
@@ -64,23 +64,30 @@ public final class StringTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_String" + append + ": " + value;
+		return "TAG_String: " + value;
 	}
 
 	@Override
 	public NBTTagString toNBTTag()
 	{
-		return new NBTTagString(this.getName(), this.getValue());
+		return new NBTTagString(this.value);
 	}
 	
 	public static StringTag fromNBTTag(NBTTagString base)
 	{
-		return new StringTag(base.getName(), base.data);
+		return new StringTag(base.a_());
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.STRING;
+	}
+
+	
+	@Override
+	public Type getDataType() {
+		return String.class;
 	}
 
 }

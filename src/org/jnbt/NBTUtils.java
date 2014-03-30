@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /*
  * JNBT License
@@ -162,7 +163,7 @@ public final class NBTUtils {
 	}
 
 	/**
-	 * Takes an object an a CompoundTag and populates any and all possible
+	 * Takes an object and a CompoundTag and populates any and all possible
 	 * data into the object from the CompoundTag.
 	 * @param object The object to populate with the contents of the tag
 	 * @param tag The tag to extract the data from
@@ -170,14 +171,15 @@ public final class NBTUtils {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void populateObject(Object object, CompoundTag tag)
 	{
-		for (Tag t : tag.getValue().values())
+		for (Entry<String, Tag> entry : tag.getValue().entrySet())
 		{
+			Tag t = entry.getValue();
 			Field field = null;
 		
 			// --------- Check to see if the field exists in the object -------- //
 			for (Field f : object.getClass().getFields())
 			{
-				if (f.getName().equals(t.getName()))
+				if (f.getName().equals(entry.getKey()))
 				{
 					field = f;
 					break;
@@ -225,9 +227,9 @@ public final class NBTUtils {
 		}
 	}
 
-	public static CompoundTag objectToCompoundTag(Object object, String name)
+	public static CompoundTag objectToCompoundTag(Object object)
 	{
-		CompoundTag tag = new CompoundTag(name, new HashMap<String, Tag>());
+		CompoundTag tag = new CompoundTag(new HashMap<String, Tag>());
 		
 		for (Field field : object.getClass().getFields())
 		{
@@ -237,9 +239,9 @@ public final class NBTUtils {
 					continue;
 				Tag t = null;
 				
-				t = Tag.fromValue(field.getName(), field.get(object));
+				t = Tag.fromValue(field.get(object));
 				
-				tag.getValue().put(t.getName(), t);
+				tag.getValue().put(field.getName(), t);
 					
 			}
 			catch (Exception e)

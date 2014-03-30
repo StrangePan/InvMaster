@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_6_R2.NBTTagList;
+import net.minecraft.server.v1_7_R1.NBTTagList;
 
 /**
  * The <code>TAG_List</code> tag.
@@ -60,12 +60,10 @@ public final class ListTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param type The type of item in the list.
 	 * @param value The value.
 	 */
-	public ListTag(String name, Class<? extends Tag> type, List<Tag> value) {
-		super(name, TagType.LIST);
+	public ListTag(Class<? extends Tag> type, List<Tag> value) {
 		this.type = type;
 		this.value = Collections.unmodifiableList(value);
 	}
@@ -88,13 +86,8 @@ public final class ListTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
 		StringBuilder bldr = new StringBuilder();
-		bldr.append("TAG_List" + append + ": " + value.size() + " entries of type " + NBTUtils.getTypeName(type) + "\r\n{\r\n");
+		bldr.append("TAG_List: " + value.size() + " entries of type " + NBTUtils.getTypeName(type) + "\r\n{\r\n");
 		for(Tag t : value) {
 			bldr.append("   " + t.toString().replaceAll("\r\n", "\r\n   ") + "\r\n");
 		}
@@ -105,7 +98,7 @@ public final class ListTag extends Tag {
 	@Override
 	public NBTTagList toNBTTag()
 	{
-		NBTTagList tag = new NBTTagList(this.getName());
+		NBTTagList tag = new NBTTagList();
 		for (Tag t : this.getValue())
 		{
 			tag.add(t.toNBTTag());
@@ -123,7 +116,18 @@ public final class ListTag extends Tag {
 		{
 			list.add(Tag.fromNBTTag(base.get(i)));
 		}
-		return new ListTag(base.getName(), (Class<? extends Tag>) type.getClass(), list);
+		return new ListTag((Class<? extends Tag>) type.getClass(), list);
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.LIST;
+	}
+
+	@Override
+	public Type getDataType() {
+		return List.class;
 	}
 
 }

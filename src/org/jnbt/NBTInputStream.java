@@ -81,14 +81,22 @@ public final class NBTInputStream implements Closeable {
 	}
 	
 	/**
-	 * Reads an NBT from the stream.
+	 * Reads an NBT from the stream. Discards the tag name. Be careful!
 	 * @param depth The depth of this tag.
 	 * @return The tag that was read.
 	 * @throws IOException if an I/O error occurs.
 	 */
 	private Tag readTag(int depth) throws IOException {
-		int type = is.readByte() & 0xFF;
-				
+		int type = readTagType();
+		readTagName(type); // Throw away
+		return readTagPayload(type, depth);
+	}
+	
+	private int readTagType() throws IOException {
+		return is.readByte() & 0xFF;
+	}
+	
+	private String readTagName(int type) throws IOException {
 		String name;
 		if(type != NBTConstants.TYPE_END) {
 			int nameLength = is.readShort() & 0xFFFF;
@@ -98,8 +106,7 @@ public final class NBTInputStream implements Closeable {
 		} else {
 			name = "";
 		}
-		
-		return readTagPayload(type, name, depth);
+		return name;
 	}
 
 	/**
@@ -110,7 +117,7 @@ public final class NBTInputStream implements Closeable {
 	 * @return The tag.
 	 * @throws IOException if an I/O error occurs.
 	 */
-	private Tag readTagPayload(int type, String name, int depth) throws IOException {
+	private Tag readTagPayload(int type, int depth) throws IOException {
 		switch(type) {
 		case NBTConstants.TYPE_END:
 			if(depth == 0) {
@@ -119,59 +126,61 @@ public final class NBTInputStream implements Closeable {
 				return new EndTag();
 			}
 		case NBTConstants.TYPE_BYTE:
-			return new ByteTag(name, is.readByte());
+			return new ByteTag(is.readByte());
 		case NBTConstants.TYPE_SHORT:
-			return new ShortTag(name, is.readShort());
+			return new ShortTag(is.readShort());
 		case NBTConstants.TYPE_INT:
-			return new IntTag(name, is.readInt());
+			return new IntTag(is.readInt());
 		case NBTConstants.TYPE_LONG:
-			return new LongTag(name, is.readLong());
+			return new LongTag(is.readLong());
 		case NBTConstants.TYPE_FLOAT:
-			return new FloatTag(name, is.readFloat());
+			return new FloatTag(is.readFloat());
 		case NBTConstants.TYPE_DOUBLE:
-			return new DoubleTag(name, is.readDouble());
+			return new DoubleTag(is.readDouble());
 		case NBTConstants.TYPE_BYTE_ARRAY:
 			int length = is.readInt();
 			byte[] bytes = new byte[length];
 			is.readFully(bytes);
-			return new ByteArrayTag(name, bytes);
+			return new ByteArrayTag(bytes);
 		case NBTConstants.TYPE_INT_ARRAY:
 			length = is.readInt();
 			int[] ints = new int[length];
 			for (int i = 0; i < length; i++)
 				ints[i] = is.readInt();
-			return new IntArrayTag(name, ints);
+			return new IntArrayTag(ints);
 		case NBTConstants.TYPE_STRING:
 			length = is.readShort();
 			bytes = new byte[length];
 			is.readFully(bytes);
-			return new StringTag(name, new String(bytes, NBTConstants.CHARSET));
+			return new StringTag(new String(bytes, NBTConstants.CHARSET));
 		case NBTConstants.TYPE_LIST:
 			int childType = is.readByte();
 			length = is.readInt();
 			
 			List<Tag> tagList = new ArrayList<Tag>();
 			for(int i = 0; i < length; i++) {
-				Tag tag = readTagPayload(childType, "", depth + 1);
+				Tag tag = readTagPayload(childType, depth + 1);
 				if(tag instanceof EndTag) {
 					throw new IOException("TAG_End not permitted in a list.");
 				}
 				tagList.add(tag);
 			}
 			
-			return new ListTag(name, NBTUtils.getTypeClass(childType), tagList);
+			return new ListTag(NBTUtils.getTypeClass(childType), tagList);
 		case NBTConstants.TYPE_COMPOUND:
 			Map<String, Tag> tagMap = new HashMap<String, Tag>();
 			while(true) {
-				Tag tag = readTag(depth + 1);
+				int type2 = readTagType();
+				String name = readTagName(type2);
+				Tag tag = readTagPayload(type2, depth + 1);
 				if(tag instanceof EndTag) {
 					break;
 				} else {
-					tagMap.put(tag.getName(), tag);
+					tagMap.put(name, tag);
 				}
 			}
 			
-			return new CompoundTag(name, tagMap);
+			return new CompoundTag(tagMap);
 		default:
 			throw new IOException("Invalid tag type: " + type + ".");
 		}

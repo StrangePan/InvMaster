@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_6_R2.NBTTagCompound;
+import net.minecraft.server.v1_7_R1.NBTTagCompound;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.FileUtil;
 import org.jnbt.ByteTag;
@@ -227,7 +227,7 @@ public class PlayerFile
 			int slot = ((ByteTag) ((CompoundTag) t).getValue().get("Slot")).getValue();
 			if (slot < 36)
 			{
-				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_6_R2.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
+				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_7_R1.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
 			}
 		}
 		
@@ -248,7 +248,7 @@ public class PlayerFile
 			int slot = ((ByteTag) ((CompoundTag) t).getValue().get("Slot")).getValue();
 			if (slot >= 100 && slot <= 103)
 			{
-				inv[slot-100] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_6_R2.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
+				inv[slot-100] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_7_R1.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
 			}
 		}
 		
@@ -269,7 +269,7 @@ public class PlayerFile
 			int slot = ((ByteTag) ((CompoundTag) t).getValue().get("Slot")).getValue();
 			if (slot < 36)
 			{
-				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_6_R2.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
+				inv[slot] = CraftItemStack.asBukkitCopy(net.minecraft.server.v1_7_R1.ItemStack.createStack(((CompoundTag) t).toNBTTag()));
 			}
 		}
 		
@@ -293,7 +293,7 @@ public class PlayerFile
 			
 			Tag t = Tag.fromNBTTag(CraftItemStack.asNMSCopy(Inventory[i]).save(new NBTTagCompound()));
 			
-			((CompoundTag) t).getValue().put("Slot", new ByteTag("Slot", i));
+			((CompoundTag) t).getValue().put("Slot", new ByteTag(i));
 			
 			if (t != null)
 				list.add(t);
@@ -306,13 +306,13 @@ public class PlayerFile
 			
 			Tag t = Tag.fromNBTTag(CraftItemStack.asNMSCopy(Armor[i]).save(new NBTTagCompound()));
 			
-			((CompoundTag) t).getValue().put("Slot", new ByteTag("Slot", (byte) (i + 100)));
+			((CompoundTag) t).getValue().put("Slot", new ByteTag((byte) (i + 100)));
 			
 			if (t != null)
 				list.add(t);
 		}
 		
-		tag.getValue().put("Inventory", new ListTag("Inventory", CompoundTag.class ,list));
+		tag.getValue().put("Inventory", new ListTag(CompoundTag.class ,list));
 	}
 	
 	/**
@@ -330,13 +330,13 @@ public class PlayerFile
 
 			Tag t = Tag.fromNBTTag(CraftItemStack.asNMSCopy(Enderchest[i]).save(new NBTTagCompound()));
 			
-			((CompoundTag) t).getValue().put("Slot", new ByteTag("Slot", i));
+			((CompoundTag) t).getValue().put("Slot", new ByteTag(i));
 			
 			if (t != null)
 				list.add(t);
 		}
 		
-		tag.getValue().put("EnderItems", new ListTag("EnderItems", CompoundTag.class, list));
+		tag.getValue().put("EnderItems", new ListTag(CompoundTag.class, list));
 	}
 	
 	
@@ -447,7 +447,7 @@ public class PlayerFile
 		}
 		try
 		{
-			nbt_output.writeTag(tag);
+			nbt_output.writeTag("", tag);
 		}
 		catch (IOException e)
 		{

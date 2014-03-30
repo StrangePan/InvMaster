@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagByte;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagByte;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class ByteTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public ByteTag(String name, byte value) {
-		super(name, TagType.BYTE);
+	public ByteTag(byte value) {
 		this.value = value;
 	}
 
@@ -64,22 +64,29 @@ public final class ByteTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Byte" + append + ": " + value;
+		return "TAG_Byte: " + value;
 	}
 	
 	@Override
 	public NBTTagByte toNBTTag()
 	{
-		return new NBTTagByte(this.getName(), this.getValue());
+		return new NBTTagByte(this.getValue());
 	}
 	
 	public static ByteTag fromNBTTag(NBTTagByte base)
 	{
-		return new ByteTag(base.getName(), base.data);
+		return new ByteTag(base.f());
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.BYTE;
+	}
+
+	
+	@Override
+	public Type getDataType() {
+		return byte.class;
 	}
 }

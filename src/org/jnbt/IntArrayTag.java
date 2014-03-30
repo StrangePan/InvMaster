@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagIntArray;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagIntArray;
 
 /*
  * JNBT License
@@ -52,8 +54,7 @@ public class IntArrayTag extends Tag {
 	 * @param name The name.
 	 * @param value The value.
 	 */
-	public IntArrayTag(String name, int[] value) {
-		super (name, TagType.INT_ARRAY);
+	public IntArrayTag(int[] value) {
 		this.value = value;
 	}
 	
@@ -72,23 +73,28 @@ public class IntArrayTag extends Tag {
 			}
 			hex.append(hexDigits).append(" ");
 		}
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Int_Array" + append + ": " + hex.toString();
+		return "TAG_Int_Array: " + hex.toString();
 	}
 
 	@Override
 	public NBTTagIntArray toNBTTag()
 	{
-		return new NBTTagIntArray(this.getName(), this.getValue());
+		return new NBTTagIntArray(this.getValue());
 	}
 	
 	public static IntArrayTag fromNBTTag(NBTTagIntArray base)
 	{
-		return new IntArrayTag(base.getName(), base.data);
+		return new IntArrayTag(base.c());
+	}
+
+	@Override
+	public TagType getTagType() {
+		return TagType.INT_ARRAY;
+	}
+
+	@Override
+	public Type getDataType() {
+		return int[].class;
 	}
 	
 	

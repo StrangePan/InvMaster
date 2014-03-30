@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagLong;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagLong;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class LongTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public LongTag(String name, long value) {
-		super(name, TagType.LONG);
+	public LongTag(long value) {
 		this.value = value;
 	}
 	
@@ -64,22 +64,27 @@ public final class LongTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Long" + append + ": " + value;
+		return "TAG_Long: " + value;
 	}
 
 	@Override
 	public NBTTagLong toNBTTag()
 	{
-		return new NBTTagLong(this.getName(), this.getValue());
+		return new NBTTagLong(this.getValue());
 	}
 	
 	public static LongTag fromNBTTag(NBTTagLong base)
 	{
-		return new LongTag(base.getName(), base.data);
+		return new LongTag(base.c());
+	}
+
+	@Override
+	public TagType getTagType() {
+		return TagType.LONG;
+	}
+
+	@Override
+	public Type getDataType() {
+		return long.class;
 	}
 }

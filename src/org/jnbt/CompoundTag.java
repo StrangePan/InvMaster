@@ -33,12 +33,12 @@ package org.jnbt;
  * POSSIBILITY OF SUCH DAMAGE. 
  */
 
-import java.util.Collection;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import net.minecraft.server.v1_6_R2.NBTBase;
-import net.minecraft.server.v1_6_R2.NBTTagCompound;
+import net.minecraft.server.v1_7_R1.NBTTagCompound;
 
 /**
  * The <code>TAG_Compound</code> tag.
@@ -57,8 +57,7 @@ public final class CompoundTag extends Tag {
 	 * @param name The name.
 	 * @param value The value.
 	 */
-	public CompoundTag(String name, Map<String, Tag> value) {
-		super(name, TagType.COMPOUND);
+	public CompoundTag(Map<String, Tag> value) {
 		this.value = value;
 	}
 
@@ -69,15 +68,10 @@ public final class CompoundTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
 		StringBuilder bldr = new StringBuilder();
-		bldr.append("TAG_Compound" + append + ": " + value.size() + " entries\r\n{\r\n");
+		bldr.append("TAG_Compound: " + value.size() + " entries\r\n{\r\n");
 		for(Map.Entry<String, Tag> entry : value.entrySet()) {
-			bldr.append("   " + entry.getValue().toString().replaceAll("\r\n", "\r\n   ") + "\r\n");
+			bldr.append("   " + entry.getKey() + ": " + entry.getValue().toString().replaceAll("\r\n", "\r\n   ") + "\r\n");
 		}
 		bldr.append("}");
 		return bldr.toString();
@@ -90,7 +84,7 @@ public final class CompoundTag extends Tag {
 	 */
 	public static CompoundTag fromObject(Object o)
 	{
-		return NBTUtils.objectToCompoundTag(o, "");
+		return NBTUtils.objectToCompoundTag(o);
 	}
 	
 	/**
@@ -106,27 +100,37 @@ public final class CompoundTag extends Tag {
 	@Override
 	public NBTTagCompound toNBTTag()
 	{
-		NBTTagCompound tag = new NBTTagCompound(this.getName());
+		NBTTagCompound tag = new NBTTagCompound();
 		
-		for (Tag t : this.getValue().values())
+		for (Entry<String, Tag> e : this.getValue().entrySet())
 		{
-			tag.set(t.getName(), t.toNBTTag());
+			tag.set(e.getKey(), e.getValue().toNBTTag());
 		}
 		
 		return tag;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static CompoundTag fromNBTTag(NBTTagCompound base)
 	{
-		CompoundTag tag = new CompoundTag(base.getName(), new HashMap<String, Tag>());
+		CompoundTag tag = new CompoundTag(new HashMap<String, Tag>());
 		
-		for (NBTBase b : (Collection<? extends NBTBase>) base.c())
-		{
-			tag.getValue().put(b.getName(), Tag.fromNBTTag(b));
+		for (Object o : base.c()) {
+			tag.getValue().put((String) o, Tag.fromNBTTag(base.get((String) o)));
 		}
 		
 		return tag;
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.COMPOUND;
+	}
+
+	
+	@Override
+	public Type getDataType() {
+		return null;
 	}
 
 }

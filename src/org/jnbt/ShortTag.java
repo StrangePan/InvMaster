@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagShort;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagShort;
 
 /*
  * JNBT License
@@ -49,11 +51,9 @@ public final class ShortTag extends Tag {
 	
 	/**
 	 * Creates the tag.
-	 * @param name The name.
 	 * @param value The value.
 	 */
-	public ShortTag(String name, short value) {
-		super(name, TagType.SHORT);
+	public ShortTag(short value) {
 		this.value = value;
 	}
 	
@@ -64,22 +64,29 @@ public final class ShortTag extends Tag {
 	
 	@Override
 	public String toString() {
-		String name = getName();
-		String append = "";
-		if(name != null && !name.equals("")) {
-			append = "(\"" + this.getName() + "\")";
-		}
-		return "TAG_Short" + append + ": " + value;
+		return "TAG_Short: " + value;
 	}
 
 	@Override
 	public NBTTagShort toNBTTag()
 	{
-		return new NBTTagShort(this.getName(), this.getValue());
+		return new NBTTagShort(this.value);
 	}
 	
 	public static ShortTag fromNBTTag(NBTTagShort base)
 	{
-		return new ShortTag(base.getName(), base.data);
+		return new ShortTag(base.e());
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.SHORT;
+	}
+
+	
+	@Override
+	public Type getDataType() {
+		return short.class;
 	}
 }

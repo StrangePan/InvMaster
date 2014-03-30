@@ -1,6 +1,8 @@
 package org.jnbt;
 
-import net.minecraft.server.v1_6_R2.NBTTagEnd;
+import java.lang.reflect.Type;
+
+import net.minecraft.server.v1_7_R1.NBTTagEnd;
 
 /*
  * JNBT License
@@ -45,9 +47,7 @@ public final class EndTag extends Tag {
 	/**
 	 * Creates the tag.
 	 */
-	public EndTag() {
-		super("", TagType.END);
-	}
+	EndTag() {}
 
 	@Override
 	public Object getValue() {
@@ -62,11 +62,23 @@ public final class EndTag extends Tag {
 	@Override
 	public NBTTagEnd toNBTTag()
 	{
-		return new NBTTagEnd();
+		return null;
 	}
 	
 	public static EndTag fronNBTTag(NBTTagEnd base)
 	{
 		return new EndTag();
+	}
+
+	
+	@Override
+	public TagType getTagType() {
+		return TagType.END;
+	}
+	
+
+	@Override
+	public Type getDataType() {
+		return null;
 	}
 }
